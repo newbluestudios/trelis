@@ -107,7 +107,6 @@ export default async function boltz(req, res) {
     }
   )
   console.log("👾", response)
-  //This is where we fail with a 400
 
   // res.writeHead(302, {
   //   Connection: "keep-alive",
