@@ -1,19 +1,18 @@
-# Next.js Advanced Starter 🚀
+# Trelis MVP Simple Lightning Payments 👾
 
-An opinionated starter skeleton with advanced features for Next.js.
+This project relies on boltz-core:
+https://github.com/BoltzExchange/boltz-core
 
-Use Tailwind CSS, ESLint, Prettier & absolute imports instantly.
-Easily extendable zero-config template for pros and beginners.
+Build from source by cloning a copy of boltz-core under the src directory.  This will be automatically included later on.
 
-Check out the [Demo website.](https://nextjs-advanced-starter.vercel.app/)
+This project uses NextJS, specifically nextjs-advanced-starter:
+https://github.com/agcty/nextjs-advanced-starter
 
 ## Table of Contents
 
-- [Next.js Advanced Starter 🚀](#nextjs-advanced-starter-)
-  - [Table of Contents](#table-of-contents)
+- [Trelis MVP 👾]
   - [Why?](#why)
   - [Features](#features)
-  - [Who this template is for](#who-this-template-is-for)
   - [How to use](#how-to-use)
   - [Explanation why some dependencies are in this template](#explanation-why-some-dependencies-are-in-this-template)
     - [@tailwindcss/forms](#tailwindcssforms)
@@ -28,14 +27,7 @@ Check out the [Demo website.](https://nextjs-advanced-starter.vercel.app/)
 
 ## Why?
 
-This template aims to provide a minimal well-thought-out base for building advanced Next.js powered websites.
-
-It feels like there are so many templates and tutorials about configuring stacks out there that just don't work, no matter what you do. This is the template that **just works**. I know how frustrating it can be just wanting to build something but needing DAYS for coming up with the initial configuration. Especially getting Eslint + Prettier + absolute imports to work (well) together is super annoying and I believe using these features should be as simple as clicking a button. Also you probably want to style your webapp and there are few better ways than styling it with Tailwind CSS.
-
-The reason why I created this template in the first place is because I absolutely hate having to copy the same config over to a new project everytime and I don't really want to use existing templates because there always seems to be something wrong with them. Either the config is weird or the maintainers are not transparent with features.
-
-**Inviting you to collaborate**
-That being said I invite you to leave your critique about this template. If there's something wrong with ESLint, if prettier doesn't work as expected, if there's a new version of React or if the README is not transparent enough please don't hesitate to open an issue or (even better) a pull request. I've had enough with templates that don't work.
+Crypto is hard (really hard).  Even integrating an existing end-to-end solution takes a few days to setup and understand.  This project aims to provide instant payments links using a publicly accessible API endpoint that uses the secure boltz backend in a non-custodial way to tranfer funds.
 
 ## Features
 
@@ -56,19 +48,10 @@ That being said I invite you to leave your critique about this template. If ther
 - Standardized absolute imports
   - Import from @components/MyComp instead of ../../components/MyComp
 
-## Who this template is for
-
-**TLDR** This template is for beginners and pros alike. For Pros: You don't have to copy the same config over to a new project. For Beginners: Start coding like the pros without having to configure anything.
-
-If you're a newcomer to Next.js or React and you just want to start building something, this is a great place to start without worrying about configuring rules, code-formatting, css purging etc. You can figure that out later, just get developing and build things people love. I personally feel like that the features in this template are the way to go for starting a new web-dev project. Especially tailwind css has seen explosive growth and is probably going to be the standard way of styling webapps in the future. This is the minimal base-template I wish I've had when I started developing with React.
-
-If you're already a pro, this is the base-template for you. It's incredibly easy to extend or reconfigure. It's deliberately kept small so it stays performant while you build on top of it.
 
 ## How to use
 
-1. Click **"Use this Template"** button which will create a new github repo for you automatically
-2. Pull the newly created repo by following the github guide which will be shown after you finish step 1.
-3. Install dependencies and run dev server:
+1. You will first need to clone https://github.com/BoltzExchange/boltz-core and place the entire project under the src directory. This works for now even though it includes a ton of unecesary source code. 
 
 ```bash
 npm install
