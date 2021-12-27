@@ -1,29 +1,48 @@
-import React from "react"
+import React, { useEffect, useState } from "react"
 
-import Head from "next/head"
+import { useRouter } from "next/router"
 
-import SignInOut from "../components/SignInOut"
+function Swap() {
+  const [swapState, setswapState] = useState("nah")
 
-export default function Home() {
+  const router = useRouter()
+  const { id } = router.query
+
+  useEffect(() => {
+    console.log("id", id)
+    const sse = new EventSource(
+      "https://boltz.exchange/api/swapstatus?id=" + id
+    )
+
+    sse.addEventListener("message", (e) => {
+      console.log("Default message event\n", e)
+    })
+
+    function getRealtimeData(data) {
+      console.log("🔥", data)
+      setswapState(data.status)
+    }
+    console.log("🔥 about to onmessage")
+    sse.onmessage = (e) => getRealtimeData(JSON.parse(e.data))
+
+    sse.onerror = () => {
+      // error log here
+
+      sse.close()
+    }
+    return () => {
+      sse.close()
+    }
+  })
   return (
     <div>
-      <Head>
-        <title>Next.js advanced start template.</title>
-        <meta
-          name="description"
-          content="Use tailwind css, eslint, prettier & absolute imports instantly.
-            Easily extendable zero-config template for pros and beginners."
-        />
-
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
       <main className="flex justify-center min-h-screen py-20 bg-gradient-to-b from-gray-50 via-gray-50 to-gray-100">
         <div>
           <h1 className="px-5 text-4xl font-bold leading-tight tracking-tight text-center sm:mt-4 sm:text-6xl">
-            Trelis
+            Whhaaa
             <br />
           </h1>
+          <h1>{swapState}</h1>
 
           <h2 className="max-w-4xl px-10 mx-auto mt-8 text-base tracking-tight text-center text-gray-600 sm:text-2xl md:mt-5 md:text-2xl">
             Lightning Payments
@@ -48,10 +67,6 @@ export default function Home() {
 
               <div className="px-4 py-24 text-center space-y-5 place-self-center">
                 <h3 className="text-3xl font-bold">Get it 👇</h3>
-
-                <span className="inline-flex rounded-md shadow-sm">
-                  <SignInOut className="inline-flex items-center px-4 py-4 font-medium text-white bg-blue-600 border border-transparent leading-6 transition duration-150 ease-in-out rounded-md sm:px-10 hover:bg-blue-500 focus:outline-none focus:border-blue-700 focus:ring-blue-400 active:bg-blue-700 focus:ring-4" />
-                </span>
               </div>
             </section>
             <p className="mt-6 text-xs font-medium text-center text-gray-600">
@@ -112,3 +127,5 @@ function CheckIcon(props) {
     </svg>
   )
 }
+
+export default Swap
