@@ -1,45 +1,48 @@
-import React, { useEffect, useState } from "react"
+import React, { useState, useEffect, useRef } from "react"
 
+import axios from "axios"
 import { useRouter } from "next/router"
+
+// useInterval is a hook described by Dan Abramov here:
+// https://overreacted.io/making-setinterval-declarative-with-react-hooks/
+// an SSE stream would be better if it worked: https://docs.boltz.exchange/en/latest/api/#streaming-status-updates-of-a-swap
+function useInterval(callback, delay) {
+  const savedCallback = useRef()
+
+  // Remember the latest callback.
+  useEffect(() => {
+    savedCallback.current = callback
+  }, [callback])
+
+  // Set up the interval.
+  useEffect(() => {
+    function tick() {
+      savedCallback.current()
+    }
+    if (delay !== null) {
+      let id = setInterval(tick, delay)
+      return () => clearInterval(id)
+    }
+  }, [delay])
+}
 
 function Swap() {
   const [swapState, setswapState] = useState("nah")
 
   const router = useRouter()
-  const { id } = router.query
-
-  useEffect(() => {
-    console.log("id", id)
-    const sse = new EventSource(
-      "https://boltz.exchange/api/swapstatus?id=" + id
-    )
-
-    sse.addEventListener("message", (e) => {
-      console.log("Default message event\n", e)
+  const { id } = <router className="query"></router>
+  useInterval(async () => {
+    const { data } = await axios.post("https://boltz.exchange/api/swapstatus", {
+      id,
     })
+    console.log("🔥", data)
+  }, 5000)
 
-    function getRealtimeData(data) {
-      console.log("🔥", data)
-      setswapState(data.status)
-    }
-    console.log("🔥 about to onmessage")
-    sse.onmessage = (e) => getRealtimeData(JSON.parse(e.data))
-
-    sse.onerror = () => {
-      // error log here
-
-      sse.close()
-    }
-    return () => {
-      sse.close()
-    }
-  })
   return (
     <div>
       <main className="flex justify-center min-h-screen py-20 bg-gradient-to-b from-gray-50 via-gray-50 to-gray-100">
         <div>
           <h1 className="px-5 text-4xl font-bold leading-tight tracking-tight text-center sm:mt-4 sm:text-6xl">
-            Whhaaa
             <br />
           </h1>
           <h1>{swapState}</h1>
