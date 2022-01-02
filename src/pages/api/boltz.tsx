@@ -32,12 +32,12 @@ const payment = async function (swapData, byteBuffer, keys) {
     // i--
     //check if the invoice has been paid every 15 seconds
     await new Promise((resolve) => setTimeout(resolve, 5000))
-
-    const resp = await axios.post("https://boltz.exchange/api/swapstatus", {
-      id: swapData.id,
-    })
-
-    data = resp.data
+    try {
+      const resp = await axios.post("https://boltz.exchange/api/swapstatus", {
+        id: swapData.id,
+      })
+      data = resp.data
+    } catch (e) {}
   } while (data.status != "transaction.mempool")
   // } while (i > 0)
   // res.write("<h1>XXX</h1>")

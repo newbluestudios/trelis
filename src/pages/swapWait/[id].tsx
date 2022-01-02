@@ -30,12 +30,17 @@ function Swap() {
   const [swapState, setswapState] = useState("nah")
 
   const router = useRouter()
-  const { id } = <router className="query"></router>
+  const { id } = router.query
   useInterval(async () => {
-    const { data } = await axios.post("https://boltz.exchange/api/swapstatus", {
-      id,
-    })
-    console.log("🔥", data)
+    try {
+      const { data } = await axios.post(
+        "https://boltz.exchange/api/swapstatus",
+        {
+          id,
+        }
+      )
+      console.log("🔥", data)
+    } catch (e) {}
   }, 5000)
 
   return (
