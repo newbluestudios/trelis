@@ -3,7 +3,7 @@
 This project relies on boltz-core:
 https://github.com/BoltzExchange/boltz-core
 
-Build from source by cloning a copy of boltz-core under the src directory.  This will be automatically included later on.
+We use boltz-core as a git sub-module inside the src directory.  If you are cloning this project from github, remember to cd into src/boltz-core and run yarn install and npm run compile.  This will add the node modules required by boltz and generate required files and folders.
 
 This project uses NextJS, specifically nextjs-advanced-starter:
 https://github.com/agcty/nextjs-advanced-starter
