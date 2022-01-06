@@ -5,7 +5,7 @@
   "version": "1.1.0",
   "scripts": {
     "dev": "next dev",
-    "build": "cd src/boltz-core && npm run compile && cd .. && next build",
+    "build": "cd src/boltz-core && npm install && npm run compile && cd .. && next build",
     "start": "next start",
     "type-check": "tsc --pretty --noEmit",
     "format": "prettier --write .",
