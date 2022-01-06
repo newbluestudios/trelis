@@ -3,6 +3,7 @@ import React, { useState, useEffect, useRef } from "react"
 import axios from "axios"
 import { useRouter } from "next/router"
 
+const QRCode = require("qrcode.react")
 // useInterval is a hook described by Dan Abramov here:
 // https://overreacted.io/making-setinterval-declarative-with-react-hooks/
 // an SSE stream would be better if it worked: https://docs.boltz.exchange/en/latest/api/#streaming-status-updates-of-a-swap
@@ -27,10 +28,11 @@ function useInterval(callback, delay) {
 }
 
 function Swap() {
-  const [swapState, setswapState] = useState("nah")
-
+  const [swapState, setswapState] = useState("Pending Payment")
   const router = useRouter()
-  const { id } = router.query
+
+  const { amount, publicKey, id, invoice } = router.query
+
   useInterval(async () => {
     try {
       const { data } = await axios.post(
@@ -40,9 +42,11 @@ function Swap() {
         }
       )
       console.log("🔥", data)
+      if (data.status == "transaction.mempool") {
+        setswapState("Paid")
+      }
     } catch (e) {}
   }, 5000)
-
   return (
     <div>
       <main className="flex justify-center min-h-screen py-20 bg-gradient-to-b from-gray-50 via-gray-50 to-gray-100">
@@ -50,12 +54,11 @@ function Swap() {
           <h1 className="px-5 text-4xl font-bold leading-tight tracking-tight text-center sm:mt-4 sm:text-6xl">
             <br />
           </h1>
-          <h1>{swapState}</h1>
 
           <h2 className="max-w-4xl px-10 mx-auto mt-8 text-base tracking-tight text-center text-gray-600 sm:text-2xl md:mt-5 md:text-2xl">
             Lightning Payments
           </h2>
-
+          <h1 className="text-center">{swapState}</h1>
           <div className="px-4 sm:px-0">
             <section
               className="w-full mt-6 bg-white rounded-lg grid grid-cols-1 sm:mt-20 sm:grid-cols-2 sm:w-1000"
@@ -65,27 +68,17 @@ function Swap() {
               }}
             >
               <div className="flex flex-col justify-center rounded-l-lg bg-gray-50">
-                <FeatureList>
-                  <Feature main="Tailwind CSS">
-                    Integrate Lightning Payments{" "}
-                    <InfoText text="with a single line of code" />
-                  </Feature>
-                </FeatureList>
+                {router.isReady ? (
+                  <QRCode value={invoice} className="mx-12 my-12 space-y-5" />
+                ) : (
+                  <div>Generating QR </div>
+                )}
               </div>
 
               <div className="px-4 py-24 text-center space-y-5 place-self-center">
-                <h3 className="text-3xl font-bold">Get it 👇</h3>
+                <h3 className="text-3xl font-bold">Info Text 👾</h3>
               </div>
             </section>
-            <p className="mt-6 text-xs font-medium text-center text-gray-600">
-              Test Popup{" "}
-              <a
-                className="font-medium text-blue-600 transition duration-150 ease-in-out hover:text-blue-500 focus:outline-none focus:underline"
-                href="javascript:window.open('http://localhost:3000/api/test', 'yourWindowName', 'width=200,height=350');"
-              >
-                Click Me
-              </a>
-            </p>
           </div>
         </div>
       </main>

@@ -22,14 +22,14 @@ const reverseBuffer = (input: Buffer): Buffer => {
   return buffer
 }
 
-const payment = async function (swapData, byteBuffer, keys) {
+const payment = async function (swapData, byteBuffer, keys, req, res) {
   // 2. Create an empty object to hold the result of https://boltz.exchange/api/swapstatus
   let data = { status: "👾" }
-  // let i = 4
+  const { publicKey } = req.query
+
   do {
     console.log("👾 checking..")
 
-    // i--
     //check if the invoice has been paid every 15 seconds
     await new Promise((resolve) => setTimeout(resolve, 5000))
     try {
@@ -39,8 +39,7 @@ const payment = async function (swapData, byteBuffer, keys) {
       data = resp.data
     } catch (e) {}
   } while (data.status != "transaction.mempool")
-  // } while (i > 0)
-  // res.write("<h1>XXX</h1>")
+
   console.log("👾", data)
 
   // 3. After the lightning invoice has been paid, get the transaction id & hex to detect the swap
@@ -59,7 +58,6 @@ const payment = async function (swapData, byteBuffer, keys) {
       txHash: reverseBuffer(getHexBuffer(data.transaction.id)),
       vout,
       value,
-      // preimage: getHexBuffer(preimageHash),
       preimage: getHexBuffer(byteBuffer),
       keys,
       redeemScript,
@@ -73,7 +71,8 @@ const payment = async function (swapData, byteBuffer, keys) {
   } = await axios.get("https://boltz.exchange/api/getfeeestimation")
 
   const destinationScript = address.toOutputScript(
-    "bc1qj9h9axlly4k3p5t4svl50ttpk63qyte9dzg2p7",
+    // "bc1qj9h9axlly4k3p5t4svl50ttpk63qyte9dzg2p7",
+    publicKey,
     networks.bitcoin
   )
 
@@ -95,17 +94,12 @@ const payment = async function (swapData, byteBuffer, keys) {
   )
   console.log("👾", response)
 
-  // res.writeHead(302, {
-  //   Connection: "keep-alive",
-  //   "Content-Encoding": "none",
-  //   "Cache-Control": "no-cache",
-  //   "Content-Type": "text/event-stream",
-  //   Location: "/swapWait/" + swapData.id,
-  // })
-  // res.end()
+  res.end()
 }
 
 export default async function boltz(req, res) {
+  const { amount, publicKey } = req.query
+
   // 1. Create the reverse swap (lightning to bitcoin)
   const keys = ECPair.makeRandom()
   const byteBuffer = crypto.randomBytes(32)
@@ -113,32 +107,42 @@ export default async function boltz(req, res) {
     .createHash("sha256")
     .update(byteBuffer)
     .digest("hex")
-
+  console.log("👾", amount, publicKey)
+  // let swapData
+  // try {
   const { data: swapData } = await axios.post(
     "https://boltz.exchange/api/createswap",
     {
       type: "reversesubmarine",
       pairId: "BTC/BTC",
       orderSide: "buy",
-      invoiceAmount: 50000,
+      invoiceAmount: parseInt(amount),
       preimageHash,
       claimPublicKey: getHexString(keys.publicKey),
     }
   )
-  payment(swapData, byteBuffer, keys)
   console.log("👾", swapData)
-  // res.setHeader("Access-Control-Allow-Origin", "*")
-  // res.setHeader("Content-Type", "text/event-stream;charset=utf-8")
-  // res.setHeader("Cache-Control", "no-cache, no-transform")
-  // res.setHeader("X-Accel-Buffering", "no")
+
+  payment(swapData, byteBuffer, keys, req, res)
+  // } catch (e) {
+  //   console.log(e)
+  // }
 
   res.writeHead(302, {
     Connection: "keep-alive",
     "Content-Encoding": "none",
     "Cache-Control": "no-cache",
     "Content-Type": "text/event-stream",
-    Location: "/swapWait/" + swapData.id,
+    Location:
+      "/" +
+      amount +
+      "/" +
+      publicKey +
+      "/" +
+      swapData.invoice +
+      "/" +
+      swapData.id,
   })
 
-  res.write("<h1>Hmm</h1>")
+  res.write("<h1>Heado</h1>")
 }
