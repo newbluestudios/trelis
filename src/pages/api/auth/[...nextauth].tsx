@@ -1,7 +1,7 @@
 import NextAuth from "next-auth"
 import GoogleProvider from "next-auth/providers/google"
 
-import checkAirTable from "./checkAirTable.tsx"
+// import checkAirTable from "./checkAirTable.tsx"
 
 const axios = require("axios")
 /* NextAuth is great. This file is okay
@@ -19,7 +19,7 @@ export default NextAuth({
   callbacks: {
     async signIn({ user }) {
       const { email } = user
-      await checkAirTable(email) //Get AirTable account info
+      // await checkAirTable(email) //Get AirTable account info
       return true
     },
   },

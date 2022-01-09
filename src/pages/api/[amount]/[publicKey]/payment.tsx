@@ -24,7 +24,7 @@ const reverseBuffer = (input: Buffer): Buffer => {
 
 const payment = async function (swapData, byteBuffer, keys, req, res) {
   // 2. Create an empty object to hold the result of https://boltz.exchange/api/swapstatus
-  let data = { status: "👾" }
+  let data = { status: "👾", transaction: { hex: "👾", id: "👾" } }
   const { publicKey } = req.query
 
   do {
@@ -46,7 +46,8 @@ const payment = async function (swapData, byteBuffer, keys, req, res) {
   const redeemScript = getHexBuffer(swapData.redeemScript)
   const transaction = Transaction.fromHex(data.transaction.hex)
   const { vout, value, script } = detectSwap(
-    Buffer.from(redeemScript, "hex"),
+    // Buffer.from(redeemScript, "hex"),
+    redeemScript,
     transaction
   )
   console.log("👾", vout)
@@ -69,7 +70,11 @@ const payment = async function (swapData, byteBuffer, keys, req, res) {
   const {
     data: { BTC: feePerByte },
   } = await axios.get("https://boltz.exchange/api/getfeeestimation")
-
+  //display in usd rather than sats ~75k
+  //by clicking generate you agree to terms of service
+  //merchant name on infotext
+  //logo
+  //clickup
   const destinationScript = address.toOutputScript(
     // "bc1qj9h9axlly4k3p5t4svl50ttpk63qyte9dzg2p7",
     publicKey,

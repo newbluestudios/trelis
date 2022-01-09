@@ -51,7 +51,7 @@ export default function Component() {
                 <input
                   type="text"
                   value={amount}
-                  onChange={(e) => setAmount(e.target.value)}
+                  onChange={(e) => setAmount(parseInt(e.target.value))}
                 ></input>
                 <InfoText text="Receiving Wallet Address" />
                 <input

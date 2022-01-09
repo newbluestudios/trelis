@@ -1,6 +1,10 @@
 import { useSession, signIn, signOut } from "next-auth/react"
 
-export default function Component() {
+interface IMyProps {
+  className: string
+}
+
+const Component: React.FC<IMyProps> = (props: IMyProps) => {
   const { data: session } = useSession()
   if (session) {
     return (
@@ -22,3 +26,5 @@ export default function Component() {
     </>
   )
 }
+
+export default Component

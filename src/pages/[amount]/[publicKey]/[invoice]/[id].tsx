@@ -8,7 +8,7 @@ const QRCode = require("qrcode.react")
 // https://overreacted.io/making-setinterval-declarative-with-react-hooks/
 // an SSE stream would be better if it worked: https://docs.boltz.exchange/en/latest/api/#streaming-status-updates-of-a-swap
 function useInterval(callback, delay) {
-  const savedCallback = useRef()
+  const savedCallback: any = useRef()
 
   // Remember the latest callback.
   useEffect(() => {
@@ -18,7 +18,9 @@ function useInterval(callback, delay) {
   // Set up the interval.
   useEffect(() => {
     function tick() {
-      savedCallback.current()
+      if (savedCallback.current) {
+        savedCallback.current()
+      }
     }
     if (delay !== null) {
       let id = setInterval(tick, delay)
