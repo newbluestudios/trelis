@@ -2,12 +2,12 @@ import axios from "axios"
 import { Transaction, address, networks } from "bitcoinjs-lib"
 import { ECPair } from "ecpair"
 
-import { detectSwap } from "../../../../boltz-core/lib/Boltz"
-import { OutputType } from "../../../../boltz-core/lib/consts/Enums"
-import { ClaimDetails } from "../../../../boltz-core/lib/consts/Types"
-import { constructClaimTransaction } from "../../../../boltz-core/lib/swap/Claim"
-import { getHexString } from "../../../../boltz-core/lib/Utils"
-import { getHexBuffer } from "../../../../boltz-core/lib/Utils"
+import { detectSwap } from "@boltz-core/lib/Boltz"
+import { OutputType } from "@boltz-core/lib/consts/Enums"
+import { ClaimDetails } from "@boltz-core/lib/consts/Types"
+import { constructClaimTransaction } from "@boltz-core/lib/swap/Claim"
+import { getHexString } from "@boltz-core/lib/Utils"
+import { getHexBuffer } from "@boltz-core/lib/Utils"
 
 const crypto = require("crypto")
 
