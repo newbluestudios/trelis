@@ -148,6 +148,6 @@ export default async function boltz(req, res) {
       "/" +
       swapData.id,
   })
-
-  res.write("<h1>Heado</h1>")
+  res.end()
+  // res.write("<h1>Heado</h1>")
 }
